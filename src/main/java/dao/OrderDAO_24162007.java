@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import entity.CartItem_24162007;
@@ -108,18 +109,38 @@ public class OrderDAO_24162007 {
         return o;
     }
 
-    public List<Orders_24162007> getOrdersByUsername(String username) {
+    public List<Orders_24162007> getOrdersByUsername(String username, String status) {
         List<Orders_24162007> list = new ArrayList<>();
-        String sql = "SELECT * FROM Orders WHERE Username=? ORDER BY OrderId DESC";
+        String sql = "SELECT * FROM Orders WHERE Username=?" +
+                (status == null ? "" : " AND Status=?") +
+                " ORDER BY OrderId DESC";
         try (Connection conn = DBConnection_24162007.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username);
+            if (status != null) ps.setString(2, status);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) list.add(mapOrder(rs));
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public Map<String, Integer> countOrdersByStatus(String username) {
+        Map<String, Integer> map = new HashMap<>();
+        String sql = "SELECT Status, COUNT(*) AS total FROM Orders WHERE Username=? GROUP BY Status";
+        try (Connection conn = DBConnection_24162007.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String st = rs.getString("Status");
+                if (st != null) map.merge(st.trim().toUpperCase(), rs.getInt("total"), Integer::sum);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return map;
     }
 
     public Orders_24162007 getOrderById(int orderId) {

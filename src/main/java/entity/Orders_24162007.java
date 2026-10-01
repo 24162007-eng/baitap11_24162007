@@ -41,4 +41,14 @@ public class Orders_24162007 {
     public void setCreatedDate(Timestamp createdDate) { this.createdDate = createdDate; }
     public List<OrderDetails_24162007> getDetails() { return details; }
     public void setDetails(List<OrderDetails_24162007> details) { this.details = details; }
+
+    public String getStatusLabel() {
+        OrderStatus_24162007 s = OrderStatus_24162007.fromCode(status);
+        return s == null ? status : s.getLabel();
+    }
+
+    public String getStatusClass() {
+        OrderStatus_24162007 s = OrderStatus_24162007.fromCode(status);
+        return s == null ? "badge-muted" : s.getCssClass();
+    }
 }

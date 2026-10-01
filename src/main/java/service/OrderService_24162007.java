@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import dao.OrderDAO_24162007;
 import entity.CartItem_24162007;
+import entity.OrderStatus_24162007;
 import entity.Orders_24162007;
 import entity.Users_24162007;
 
@@ -20,12 +21,16 @@ public class OrderService_24162007 {
         o.setAddress(address);
         o.setNote(note);
         o.setPaymentMethod("COD");
-        o.setStatus("Chờ xác nhận");
+        o.setStatus(OrderStatus_24162007.NEW.name());
         return orderDAO.createOrder(o, cart);
     }
 
-    public List<Orders_24162007> getOrdersByUsername(String username) {
-        return orderDAO.getOrdersByUsername(username);
+    public List<Orders_24162007> getOrdersByUsername(String username, String status) {
+        return orderDAO.getOrdersByUsername(username, status);
+    }
+
+    public Map<String, Integer> countOrdersByStatus(String username) {
+        return orderDAO.countOrdersByStatus(username);
     }
 
     public Orders_24162007 getOrderById(int orderId) {

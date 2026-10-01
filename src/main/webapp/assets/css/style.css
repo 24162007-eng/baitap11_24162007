@@ -666,3 +666,11 @@ textarea { resize: vertical; }
 @media (max-width: 800px) {
   .checkout-layout { grid-template-columns: 1fr; }
 }
+.st-new { background: #dbeafe; color: #1d4ed8; }
+.st-confirmed { background: #e0e7ff; color: #4338ca; }
+.st-preparing { background: #fef3c7; color: #b45309; }
+.st-shipping { background: #cffafe; color: #0e7490; }
+.st-delivering { background: #ede9fe; color: #6d28d9; }
+.st-delivered { background: var(--success-bg); color: var(--success); }
+.st-cancelled { background: var(--danger-bg); color: var(--danger); }
+.st-returned { background: #ffedd5; color: #c2410c; }

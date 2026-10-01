@@ -1,11 +1,13 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Map;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import entity.OrderStatus_24162007;
 import entity.Orders_24162007;
 import entity.Users_24162007;
 import service.OrderService_24162007;
@@ -20,7 +22,16 @@ public class OrderServlet_24162007 extends HttpServlet {
         String idParam = req.getParameter("id");
 
         if (idParam == null) {
-            req.setAttribute("orders", orderService.getOrdersByUsername(user.getUsername()));
+            OrderStatus_24162007 filter = OrderStatus_24162007.fromCode(req.getParameter("status"));
+            Map<String, Integer> counts = orderService.countOrdersByStatus(user.getUsername());
+            int totalOrders = 0;
+            for (int n : counts.values()) totalOrders += n;
+
+            req.setAttribute("orders", orderService.getOrdersByUsername(user.getUsername(), filter == null ? null : filter.name()));
+            req.setAttribute("statuses", OrderStatus_24162007.values());
+            req.setAttribute("statusCounts", counts);
+            req.setAttribute("totalOrders", totalOrders);
+            req.setAttribute("currentStatus", filter == null ? "" : filter.name());
             req.getRequestDispatcher("/orders.jsp").forward(req, resp);
             return;
         }

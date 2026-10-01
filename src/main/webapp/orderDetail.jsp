@@ -15,7 +15,7 @@
         <h2>Đơn hàng #${order.orderId}</h2>
         <div class="subtitle">
             Đặt lúc <fmt:formatDate value="${order.createdDate}" pattern="dd/MM/yyyy HH:mm"/>
-            &nbsp;|&nbsp; Trạng thái: <c:out value="${order.status}"/>
+            &nbsp;|&nbsp; Trạng thái: <span class="badge ${order.statusClass}"><c:out value="${order.statusLabel}"/></span>
         </div>
     </div>
 </div>
